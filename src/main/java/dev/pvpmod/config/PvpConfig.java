@@ -2,6 +2,7 @@ package dev.pvpmod.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.client.particle.AnimatedParticle;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.item.ItemStack;
@@ -104,7 +105,10 @@ public class PvpConfig {
         float s = particleScale * particleScales.getOrDefault(id, 1.0f);
         if (id.equals(TOTEM_PARTICLE)) {
             s *= totemParticleScale;
-            if (totemCustomColor) particle.setColor(totemR, totemG, totemB);
+if (totemCustomColor && particle instanceof AnimatedParticle animated) {
+    int rgb = (Math.round(totemR * 255) << 16) | (Math.round(totemG * 255) << 8) | Math.round(totemB * 255);
+    animated.setColor(rgb);
+}
         }
         if (s != 1.0f) particle.scale(Math.max(0.05f, s));
     }
